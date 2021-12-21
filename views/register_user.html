@@ -1,0 +1,70 @@
+<div style="max-width: 500px; margin: auto;">
+    <div class="card">
+        <div class="card-block">
+            <form action="" id="register-staff-form">
+                <h2>Register Staff</h2>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="full_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>User Name</label>
+                    <input type="text" name="user_name" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="text" name="password" class="form-control">
+                    <small class="text-muted">
+                        Password must be more than 8 character.
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <div class="input-group">
+                        <div class=" input-group-prepend">
+                            <span class="input-group-text">+251</span>
+                            </div>
+                        <input type="text" name="phone_number" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Sex</label>
+                    <select type="text" name="sex" class="form-control">
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Date Of Birth</label>
+                    <input type="date" name="dob" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select name="account_type" class="form-control">
+                        <option value="Casher">Casher</option>
+                        <option value="Food Prepare">Food Prepare</option>
+                        <option value="Deliverer">Deliverer</option>
+                    </select>
+                </div>
+                <hr>
+                <div class="form-group">
+                    <label for="aggr" class="text-faded d-flex d-inline-block">
+                        <input type="checkbox" name="aggr"
+                               id="aggr" class="mr-3"
+                               onclick="if (this.checked) { $('#register-staff').removeAttr('disabled') } else { $('#register-staff').attr('disabled','true'); }">
+                        <span>
+                        I agree with the agreement listed in <a href="agree.html">here</a> and
+                        conform to the services provided with the agreement.
+                        </span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" disabled id="register-staff" type="submit" >
+                        <span class="fa fa-check"></span>
+                        Register Customer
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  php:
+    image: php:7.4-apache
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www/html/
+
+  database:
+    image: mysql
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: foodman_db
+      MYSQL_ROOT_PASSWORD: password
+    command: --default-authentication-plugin=mysql_native_password

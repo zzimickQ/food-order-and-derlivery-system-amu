@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        tr:hover {
+            background-color: beige;
+        }
+
+        .buts {
+            font-family: sans-serif;
+            width: 136px;
+            color: rgba(66, 21, 255, 0.81);
+            background-color: rgba(252, 255, 250, 0.81);
+            font-family: "Bell Gothic Std Light";
+            font-size: large;
+            float: inherit;
+            vertical-align: top;
+            border-radius: 15px;
+            transition: transform 1s;
+            margin-left: 25px;
+        }
+
+        .buts:hover {
+            /*padding-top: 25px;*/
+            transform: scale(1.3);
+            /*margin-bottom: 2.5px;*/
+            /*border-bottom-left-radius: 5px;*/
+            /*border-bottom-right-radius: 5px;*/
+        }
+
+        button {
+            border: none;
+            padding: 5px 10px;
+            margin: 0;
+            background: linear-gradient(0deg, #d2d2d2, #e8e8e8);
+            border-radius: 12px;
+            border: 1px solid #676767;
+            box-shadow: 1px 1px 12px rgba(0, 0, 0, .2);
+        }
+
+        button:hover {
+            background: linear-gradient(0deg, #fff4f3, #ffdec7);
+        }
+
+        /*#register-meal {*/
+        /*margin: 10px;*/
+        /*}*/
+        /*#register-meal {*/
+        /*display: block;*/
+        /*margin-bottom: 10px;*/
+        /*}*/
+
+    </style>
+</head>
+<body>
+<img src="icon.jpg" alt="" width="100%" height="180px">
+<div class="divclass">
+    <button class="buts" onclick="customerRegistration()">
+        ደንበኛ መዝግብ
+    </button>
+    <button class="buts" onclick="customerDisplay()">
+        ደንበኞችን አሳይ
+
+    </button>
+    <button class="buts" onclick="menuList()">
+        ሜኑ አሳይ
+    </button>
+    <button class="buts" onclick="displayOrder()">
+        ትእዛዞች
+    </button>
+
+    <button class="buts" onclick="mealRegistration()">
+        ምግብ መመዝገቢያ
+
+    </button>
+
+    <button class="buts" onclick="customerDescription()">
+        የደንበኛ መግልጫ
+    </button>
+    <button class="buts" onclick="display_menu()">
+        ምግብ ማስተካከያ
+    </button>
+
+    <h4>
+        Report
+
+        <select name="" id="" value="Report">
+            <option value="ዕለታዊ">ዕለታዊ</option>
+            <option value="ወራዊ">ወራዊ</option>
+            <option value="አመታዊ">አመታዊ</option>
+        </select></h4>
+
+</div>
+<div class="dyna" id="dynamic"></div>
+<div>
+    <footer>---System Software developed by Quatra Application development crew version 1.10---</footer>
+</div>
+<div id="p"></div>
+
+<!--Customer Registration Form-->
+<div class="hide">
+    <div id="register-customer">
+
+        <form onsubmit="submit_register(this); return false;" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label>Name</label>
+                    </td>
+                    <td>
+                        <input type="text" name="name">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>School ID</label>
+                    </td>
+                    <td>
+                        <input type="text" name="school_id">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Department</label>
+                    </td>
+                    <td>
+                        <input type="text" name="department">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Phone Number</label>
+                    </td>
+                    <td>
+                        <input type="text" name="phone_num">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Balance</label>
+                    </td>
+                    <td>
+                        <input type="number" name="credit" value="800">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Username</label>
+                    </td>
+                    <td>
+                        <input type="text" name="username">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Password</label>
+                    </td>
+                    <td>
+                        <input type="text" name="password">
+                    </td>
+                </tr>
+
+            </table>
+            <input type="submit" value="Register" name="submit">
+        </form>
+
+    </div>
+
+</div>
+
+<!--Meal Registration Form-->
+<div class="hide">
+    <div id="register-meal">
+
+        <form onsubmit="try{submit_meal(this);} finally {return false;}" method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label>Meal</label>
+                    </td>
+                    <td>
+                        <input type="text" name="meal">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>price</label>
+                    </td>
+                    <td>
+                        <input type="text" name="price">
+                    </td>
+                </tr>
+
+            </table>
+            <div id="my_div">
+                <label>
+                    Available Period
+                </label>
+                <br>
+
+                <input type="checkbox" value="Breakfast" name="Breakfast" id="brf">
+                <label for="brf">Breakfast</label>
+                <input type="checkbox" value="Lunch" name="Lunch" id="lun">
+                <label for="lun">Lunch</label>
+                <input type="checkbox" value="Dinner" name="Dinner" id="din">
+                <label for="din">Dinner</label>
+                <br>
+
+                <input type="submit" value="Register">
+            </div>
+        </form>
+
+    </div>
+
+</div>
+
+<script src="functions.js"></script>
+<script src="thescript.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<div>
+    <div class="card" id="cust-list">
+        <div class="card-block">
+
+            <h3>Customers</h3>
+            <p class="text-muted">
+                Ubi est regius olla?Nunquam demitto nixus.Lapsuss studere in culina!
+            </p>
+            <form class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search Customer">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary">
+                            <i class="fa fa-search"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <a href="/register_customer" class="btn btn-success">
+                <i class="fa fa-check"></i>
+                Register New Customer
+            </a>
+        </div>
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Username</th>
+                <th>Full Name</th>
+                <th>ID</th>
+                <th>Phone Number</th>
+                <th>Current Balance</th>
+            </tr>
+            </thead>
+            <tbody id="tabl">
+            </tbody>
+        </table>
+    </div>
+</div>
+<script type="text/x-jquery-template" id="table-row">
+    <tr href="/view_customer/${customer_id}">
+        <td>${customer_id}</td>
+        <td>${username}</td>
+        <td>${full_name}</td>
+        <td>${special_id}</td>
+        <td>${phone_number}</td>
+        <td class="text-${ballance >0?'success':'danger'}">${ballance} Birr</td>
+    </tr>
+</script>
+
+<script>
+    $(function () {
+        var cus = $("#cust-list");
+        cus.hide();
+        $.jsonAjax({
+            url: '/read/get-customer.php',
+            success: function(data) {
+                console.log(data);
+                cus.fadeIn(1000);
+                if (data.error === undefined) {
+                    $("#tabl").html(
+                        $("#table-row").tmpl(data.success)
+                    );
+                } else {
+                    cus.find("table").html($("<h2>").html("No Customer Found")
+                        .addClass('card-block'));
+                }
+            }
+        });
+    });
+</script>

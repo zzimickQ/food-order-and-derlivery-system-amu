@@ -1,0 +1,236 @@
+<div>
+    <div class="w-75 m-auto" id="cust-view">
+        <a href="/view_customers" class="btn btn-primary">
+            <i class="fa fa-arrow-left"></i>
+            Go Back
+        </a>
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>
+                    <span class="fa fa-user-circle"></span>
+                    Customer Profile
+                </h3>
+            </div>
+            <div class="card-block">
+                <h3>username of customer</h3>
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <img src="/back/img/${profile_pic}" class="img-thumbnail">
+                    </div>
+                    <div class="col-md-8">
+                        <dl class="">
+
+                            <dt>Full Name</dt>
+                            <dd>${full_name}</dd>
+
+                            <dt>Sex</dt>
+                            <dd>${sex}</dd>
+
+                            <dt>Phone Number</dt>
+                            <dd>+251 ${phone_number}</dd>
+
+                            <dt>ID Code</dt>
+                            <dd>${special_id}</dd>
+
+                            <!--<dt>Address</dt>-->
+                            <!--<dd>Dorm 100 Block Something</dd>-->
+
+                            <dt>
+                                <span class="fa fa-money"></span>
+                                Ballance
+                            </dt>
+                            <dd class="">
+                                ${ballance} Birr
+                            </dd>
+
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer clearfix">
+                <div class="float-left">
+                    <a class="btn btn-info" href="/update-balance/${customer_id}">
+                        <span class="fa fa-pencil"></span>
+                        Update Balance
+                    </a>
+                </div>
+                <div class="float-right">
+                    <button class="btn btn-danger" id="delete">
+                        <span class="fa fa-trash"></span>
+                        Delete Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>
+                    <span class="fa fa-list"></span>
+                    Order History
+                </h3>
+            </div>
+            <div class="card-block">
+                <p class="text-muted">
+                    Ecce, gratis deus!Ubi est barbatus era?Sunt medicinaes demitto salvus, rusticus guttuses.Ecce,
+                    nixus!Nunquam dignus lamia.Placidus mons interdum vitares resistentia est.
+                </p>
+                <a class="btn btn-success" href="/make_order/${customer_id}">
+                    <span class="fa fa-check"></span>
+                    Make Order
+                </a>
+            </div>
+            <div class="max-scroll-bag">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <td>#</td>
+                        <td>Meal Name</td>
+                        <td>Order Date</td>
+                        <td>Order Time</td>
+                        <td>Status</td>
+                    </tr>
+                    </thead>
+                    <tbody id="meal-list">
+                    <tr class="table-success">
+                        <td>2</td>
+                        <td>Beyayinet</td>
+                        <td>June 12 2018</td>
+                        <td>Breakfast</td>
+                        <td>Waiting</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Beyayinet</td>
+                        <td>June 12 2018</td>
+                        <td>Breakfast</td>
+                        <td>Delivered</td>
+                    </tr>
+                    <tr>
+                        <td>36</td>
+                        <td>Key Wot</td>
+                        <td>June 11 2018</td>
+                        <td>Dinner</td>
+                        <td>Delivered</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>
+                    <span class="fa fa-list"></span>
+                    Balance Update History
+                </h3>
+            </div>
+            <div class="card-block">
+                <h4>Currently Balance is <strong>${ballance} Birr</strong>.</h4>
+                <p class="text-muted">To add more to the contract press below.</p>
+                <a href="/update-balance/${customer_id}" class="btn btn-success">
+                    <i class="fa fa-check"></i>
+                    Add to Balance
+                </a>
+            </div>
+            <div class="max-scroll-bag">
+                <table class="table">
+                    <thead class="thead-dark">
+                    <tr>
+                        <td>Money Amount</td>
+                        <td>Update Date & Time</td>
+                        <td>Cashier Name</td>
+                    </tr>
+                    </thead>
+                    <tbody id="bal-list">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script id="meal-item" type="text/j-query-template">
+    {{each orders}}
+    <tr class="text-${processed_by_id != 0 ? 'success': 'warning'}">
+        <td>${order_id}</td>
+        <td>${meal_name}</td>
+        <td>${order_time}</td>
+        <td>${price}</td>
+        <td>${processed_by_id}</td>
+    </tr>
+    {{/each}}
+</script>
+<script id="bal-item" type="text/j-query-template">
+    {{each bal}}
+    <tr>
+        <td>${amount} Birr</td>
+        <td>
+            ${update_datetime}
+        </td>
+        <td>
+
+        </td>
+    </tr>
+    {{/each}}
+</script>
+<script>
+    $(function () {
+        dat = new FormData();
+        cust = $("#cust-view");
+
+        var toDate = function (d) {
+            v = new Date(d);
+            return v.toDateString()
+        };
+        dat.append('customer_id', $.getUrlData());
+        cust.hide();
+        $.jsonAjax({
+            url: "read/get-customer.php",
+            data: dat,
+            success: function (mess) {
+                console.log(mess.success[0]);
+                if (mess.error === undefined) {
+                    cust.parent().html(cust.tmpl(mess.success[0], {
+
+                    }));
+                } else $.changeUrl('/view_customers');
+            },
+            error: function (er1, er2, er3) {
+            }
+        });
+        dat2 = new FormData();
+        dat2.append('cust_id', $.getUrlData());
+        $.jsonAjax({
+            url: "read/get-order.php",
+            data: dat2,
+            success: function (succ) {
+                $("#meal-list").html($("#meal-item").tmpl(succ));
+            }
+        });
+        dat3 = new FormData();
+        dat3.append('customer_id', $.getUrlData());
+        $.jsonAjax({
+            url: "read/get_balance.php",
+            data: dat3,
+            success: function (succ) {
+                $("#bal-list").html($("#bal-item").tmpl(succ));
+            }
+        });
+        $('body').on('click', '#delete', function () {
+            dat = new FormData();
+            dat.append('customer_id', $.getUrlData());
+            $.jsonAjax({
+                url: "write/delete-customer.php",
+                data: dat,
+                success: function (data) {
+                    if (data.error === undefined) {
+                        $.changeUrl('/view_customers');
+                    }
+                }
+            });
+
+        });
+
+    });
+
+
+</script>

@@ -1,0 +1,106 @@
+<div>
+    <div class="card">
+        <div class="card-block">
+            <h2>Meal Menu</h2>
+            <a href="/register-meal" class="btn btn-success">
+                <i class="fa fa-check"></i>
+                Register New Meal
+            </a>
+
+            <div class="row mt-4" id="menu-list">
+            </div>
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+</div>
+
+<script id="meal-item" type="text/j-query-template">
+    <div class="col-md-4 mb-3">
+        <div class="card card-hover shadow">
+            <img src="/back/img/${meal_pic}" class="my-card-img">
+            <div class="card-block">
+                <div class="card-title">
+                    ${meal_name}
+                </div>
+                <h4>
+                    <div class="badge badge-pill badge-danger">
+                        ${price} Birr
+                    </div>
+                </h4>
+                <div>
+                    {{if av_for_breakfast==1}}
+                    <i class="fa fa-check"></i>
+                    {{/if}}
+                    {{if av_for_breakfast==0}}
+                    <i class="fa fa-close"></i>
+                    Not
+                    {{/if}}
+                    Available for Breakfast
+                </div>
+                <div>
+                    {{if av_for_lunch==1}}
+                    <i class="fa fa-check"></i>
+                    {{/if}}
+                    {{if av_for_lunch==0}}
+                    <i class="fa fa-close"></i>
+                    Not
+                    {{/if}}
+                    Available for Lunch
+                </div>
+                <div>
+                    {{if av_for_dinner==1}}
+                    <i class="fa fa-check"></i>
+                    {{/if}}
+                    {{if av_for_dinner==0}}
+                    <i class="fa fa-close"></i>
+                    Not
+                    {{/if}}
+                    Available for Dinner
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-danger deleter" data-id="${meal_id}">
+                    Delete Meal
+                </button>
+            </div>
+        </div>
+    </div>
+
+</script>
+
+<script>
+    $(function () {
+        var me = $("#menu-list");
+        $.jsonAjax({
+            url: 'read/get-meal.php',
+            success: function (res) {
+                if (res.error === undefined) {
+                    console.log($("#meal-item").tmpl(res.success));
+                    me.html($("#meal-item").tmpl(res.success));
+                } else {
+                    me.html($("<h2>").html("No Meals Registered!"));
+                }
+            }
+        });
+
+        me.on('click','.deleter',function(ev) {
+            console.log(ev);
+            var id = $(this).attr('data-id');
+            var fd = new FormData();
+            fd.append('meal_id', id);
+            $.jsonAjax({
+                url: 'write/delete-meal.php',
+                data: fd,
+                success: function(res) {
+                    $.changeUrl('/show-menu');
+                    $.processUrl();
+                }
+            });
+
+        });
+
+
+    });
+</script>

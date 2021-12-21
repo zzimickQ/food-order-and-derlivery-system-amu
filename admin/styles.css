@@ -1,0 +1,126 @@
+
+.divclass{
+    margin: 40px;
+    display: block;
+    background: rgba(0, 50, 30, 0.64);
+    padding: 20px;
+    opacity: 1;
+}
+body{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: url("18HUNGRY-BENYAM-slide-9MRG-superJumbo.jpg") 0 220px no-repeat, whitesmoke;
+    margin: auto;
+    background-color: wheat;
+
+}
+.dyna {
+    opacity: 1;
+    background: rgba(200, 200, 255, 0.64);
+    width: 1000px;
+    height:inherit;
+}
+
+
+.det {
+    width: 100px;
+    height: 25px;
+}
+
+
+tr {
+    padding: 10px;
+    width: 194px;
+    margin: 10px;
+    text-align: center;
+
+
+}
+
+tr:hover{
+    cursor: pointer;
+}
+table {
+    padding: 10px;
+    margin: 10px;
+    border-spacing: 0;
+    collapse: 0;
+}
+th {
+    width: 194px;
+}
+#login_tab{
+    background-color:rgba(41, 39, 231, 0.64) ;
+}
+
+tr td {
+    border-top: 1px solid rgba(41, 39, 231, 0.64);
+    /*border-left: 1px solid rgba(41, 39, 231, 0.64);*/
+}
+
+
+#register-customer {
+    margin: 10px;
+}
+#register-customer > * {
+    display: block;
+    margin-bottom: 10px;
+}
+#register-customer
+
+#my_div {
+    margin-right   : 20px;
+    font-weight: bold;
+    padding: 30px;
+}
+.hide {
+    display: none;
+}/*Aharoni*/
+label {
+    padding-top: 10px;
+    font-weight: bolder;
+    font-family: Aharoni;
+    text-align: center;
+    border: aqua;
+    color: rgba(215, 0, 0, 1);
+    /*background-color: black;*/
+}
+/*body{*/
+
+    /*display: flex;*/
+    /*flex-direction: column;*/
+    /*align-items: center;*/
+    /*background: url("18HUNGRY-BENYAM-slide-9MRG-superJumbo.jpg") 0 220px no-repeat, whitesmoke;*/
+    /*margin: auto;*/
+
+/*}*/
+.cancel {
+    font-family: sans-serif;
+    width: 136px;
+    color: rgba(66, 21, 255, 0.81);
+    background-color: rgba(252, 255, 250, 0.81);
+    font-family: "Bell Gothic Std Light";
+    font-size: large;
+    box-shadow: 19px;
+    float: inherit;
+    vertical-align: top;
+    border-radius:15px;
+    transition: transform 1s;
+    margin-left: 25px;
+}
+input:hover {
+    border-color: darkred ;
+}
+button:hover {
+    border-color: darkred;
+}
+h4 {
+    color: lawngreen;
+}
+footer {
+    color: #4f00ad;
+    background-color: white;
+
+}

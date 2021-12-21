@@ -1,0 +1,77 @@
+<div>
+    <div class="card" id="update-view">
+        <div class="card-block">
+            <h3>Add Balance To ${full_name}'s Customer Account</h3>
+            <div class="display-4">
+                Current Balance is ${ballance} Birr
+            </div>
+            <form id="update-form" action="" method="post" onsubmit="return false;">
+                <div class="form-group">
+                    <label for="ballance" class="form-control-label
+">Amount In Birr</label>
+                    <input type="text" id="ballance"
+                           placeholder="00.00"
+                           name="ballance" class="form-control">
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-success btn-lg">
+                        <i class="fa fa-plus"></i>
+                        Add to Account
+                    </button>
+                </div>
+            </form>
+        </div>
+        <div class="card-footer">
+
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        value = new FormData();
+        value.append('customer_id',$.getUrlData());
+        var par = $("#update-view").parent();
+        $.jsonAjax({
+            url: 'read/get-customer.php',
+            data: value,
+            success: function(res) {
+                if (res.error === undefined) {
+                    par.html(par.tmpl(res.success));
+                } else {
+                    $.changeUrl('/view_customers');
+                }
+            }
+        });
+        var dat;
+        // console.log($("[type=submit]"));
+        // $("[type=submit]").click(function () {
+        //     console.log('something');
+        //     // console.log($("#update-form")[0]);
+        //     // dat = new FormData($("#update-form")[0]);
+        // });
+        $("body").on('submit','#update-form',  function (ev) {
+            try {
+                // console.log(ev);
+                // console.log(this);
+                dat = new FormData(this);
+                dat.append('customer_id', $.getUrlData());
+                $.jsonAjax({
+                    url: 'write/update-balance.php',
+                    data: dat,
+                    success: function(res) {
+                        if (res.error === undefined) {
+                            console.log(res);
+                            $.changeUrl('/view_customer/'+$.getUrlData());
+                        } else {
+                            $.toast("Error");
+                        }
+                    }
+                });
+            } finally {
+                ev.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>

@@ -1,0 +1,225 @@
+<div class=" m-auto">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="row" id="meal-lister">
+
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-block">
+                    <h4>
+                        Order List For
+                        <br>
+                        {Customer Name}
+                    </h4>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Meal Name</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody id="order-lister">
+                    <tr>
+                        <td>Total Price</td>
+                        <td><b>0</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>15% TAX</td>
+                        <td><b>0</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Total Sum</td>
+                        <td><b>0</b></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Remaining Balance After Purchase</td>
+                        <td><b>0</b></td>
+                        <td></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="card-footer clearfix">
+                    <form id="order-action">
+                        <div class="not-enoug text-danger">
+                            Not Enough Money For Order
+                        </div>
+                        <button class="btn btn-success float-right">
+                            <span class="fa fa-check"></span>
+                            Submit Order
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script id="meal-item" type="text/j-query-template">
+    {{each success}}
+    <div class="col-md-4 mb-3 meal" href="${$index}" data-meal-id="${meal_id}">
+        <div class="card card-hover shadow">
+            <img src="/back/img/${meal_pic}" class="my-card-img">
+            <div class="card-block">
+                <div class="card-title">
+                    ${meal_name}
+                </div>
+                <h4>
+                    <div class="badge badge-pill badge-danger">
+                        ${price}
+                        Birr
+                    </div>
+                </h4>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script id="order-item" type="text/j-query-template">
+    {{each vals}}
+    <tr>
+        <td>${meal_name}</td>
+        <td>${price}</td>
+        <td>
+            <button class="btn btn-danger btn-sm" data-meal-index="$index">
+                <span class="fa fa-close"></span>
+            </button>
+        </td>
+    </tr>
+    {{/each}}
+    <tr>
+        <td>Total Price</td>
+        <td><b>${total}</b></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>15% TAX</td>
+        <td><b>${Math.round(total * .15,2)}</b></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Total Sum</td>
+        <td><b>${Math.round(total * 1.15,2)}</b></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td>Remaining Balance After Purchase</td>
+        <td><b>${Math.round(cust - (total * 1.15))}</b></td>
+        <td></td>
+    </tr>
+</script>
+<script>
+    $(function () {
+        var lister = $('#meal-lister');
+        var d = new FormData();
+        var meals = [];
+        var orders = [];
+        var orderList = $("#order-lister");
+        var customer = null;
+
+        function updateOrders() {
+            var ob = {total: 0, vals: orders, cust: 0};
+            if (customer !== null) ob['cust'] = customer.ballance;
+            $.each(orders, function (i, v) {
+                ob.total += parseFloat(v.price);
+            });
+            
+            orderList.html(
+                $("#order-item").tmpl(ob)
+            );
+            if ((ob.cust - ob.total * 1.15 < 0))
+                $('#order-action .not-enoug').show();
+            else
+                $('#order-action .not-enoug').hide();
+            if (orders.length < 1 || (ob.cust - ob.total * 1.15 < 0)) {
+                $('#order-action button').hide();
+            } else
+                $('#order-action button').show();
+        }
+
+        updateOrders();
+        d.append('order', true);
+        $.jsonAjax({
+            url: '/read/get-meal.php',
+            data: d,
+            success: function (res) {
+                if (res.error === undefined) {
+                    lister.html($("#meal-item").tmpl(res));
+                    meals = res.success;
+                } else
+                    $.changeUrl('/login');
+            }
+        });
+        var v = new FormData();
+        v.append('customer_id', $.getUrlData());
+        $.jsonAjax({
+            url: '/read/get-customer.php',
+            data: v,
+            success: function (res) {
+                
+                if (res.error === undefined) {
+                    customer = res.success[0];
+                    $("#ballance_info span").html(customer.ballance);
+                }
+                // $.changeUrl('/login');
+            }
+        });
+        lister.on('click', '[data-meal-id]', function (ev) {
+            var mid = $(this).attr('data-meal-id');
+            var ref = $(this).attr('href');
+            orders.push(meals[ref]);
+            
+            updateOrders();
+        });
+
+        orderList.on('click', '[data-meal-index]', function () {
+            var inde = $(this).attr('data-meal-index');
+            orders.splice(inde, 1);
+            updateOrders();
+        });
+
+        $('#order-action').submit(function (ev) {
+            try {
+                var successes = 0;
+                $.each(orders, function (i, one) {
+                    var data = new FormData();
+                    data.append('meal_id',one.meal_id);
+                    data.append('ordered_by_id',$.getUrlData());
+                    $.jsonAjax({
+                        url: 'write/register-order.php',
+                        data: data,
+                        success: function (res) {
+                            if (res.error === undefined) {
+                                successes++;
+                                console.log(successes);
+                                if (successes == orders.length) {
+                                    $.changeUrl('/view_customer/' + $.getUrlData());
+                                    $.toast("Order Successfully Made!")
+                                }
+                            } else {
+                                $.toast("Making Order Unsuccessful!")
+                            }
+                        },
+                        error: function (er,er1) {
+                            console.log(er);
+                            console.log(er1);
+
+
+                        }
+                    });
+                });
+            } finally {
+                ev.preventDefault();
+                return false;
+            }
+        });
+
+
+    });
+</script>
